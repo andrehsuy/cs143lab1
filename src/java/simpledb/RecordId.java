@@ -30,6 +30,10 @@ public class RecordId implements Serializable {
         // some code goes here
         return 0;
     }
+    
+    void setTupleno(int n){
+        tupleno= n;
+    }
 
     /**
      * @return the page id this RecordId references.
@@ -37,6 +41,11 @@ public class RecordId implements Serializable {
     public PageId getPageId() {
         // some code goes here
         return null;
+    }
+    
+    void setPageId(PageId p)
+    {
+        pageid= p;
     }
 
     /**
@@ -63,5 +72,7 @@ public class RecordId implements Serializable {
         throw new UnsupportedOperationException("implement this");
 
     }
+    private PageId pageid;
+    private int tupleno;
 
 }

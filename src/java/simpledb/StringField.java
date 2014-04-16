@@ -15,7 +15,10 @@ public class StringField implements Field {
 	public String getValue() {
 		return value;
 	}
-
+    public int getSize()
+    {
+        return maxSize;
+    }
 	/**
 	 * Constructor.
 	 * 
@@ -32,6 +35,8 @@ public class StringField implements Field {
 		else
 			value = s;
 	}
+    
+    
 
 	public String toString() {
 		return value;

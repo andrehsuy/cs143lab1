@@ -21,15 +21,26 @@ public class Tuple implements Serializable {
      *            instance with at least one field.
      */
     public Tuple(TupleDesc td) {
-        // some code goes here
+        Iterator<TDItem> itr= td.iterator();
+        Type[] typeArray= new Type[td.size];
+        String[] stringArray= new String[td.size];
+        
+        while(itr.hasNext()) {
+            TDItem item = itr.next();
+            typeArray.add(item.fieldType);
+            stringArray.add(item.fieldName);
+        }
+        t= new TupleDesc(typeArray, stringArray);
+        size= t.size;
+        f= new ArrayList<Field>(size);
+        id = null;
     }
 
     /**
      * @return The TupleDesc representing the schema of this tuple.
      */
     public TupleDesc getTupleDesc() {
-        // some code goes here
-        return null;
+        return t;
     }
 
     /**
@@ -37,8 +48,7 @@ public class Tuple implements Serializable {
      *         be null.
      */
     public RecordId getRecordId() {
-        // some code goes here
-        return null;
+        return id;
     }
 
     /**
@@ -48,7 +58,8 @@ public class Tuple implements Serializable {
      *            the new RecordId for this tuple.
      */
     public void setRecordId(RecordId rid) {
-        // some code goes here
+        
+        id= new RecordId(rid.getPageId(), rid.tupleno());
     }
 
     /**
@@ -60,7 +71,22 @@ public class Tuple implements Serializable {
      *            new value for the field.
      */
     public void setField(int i, Field f) {
-        // some code goes here
+        if(i>0 && i < size)
+        {
+            Field temp;
+            if(f instanceof IntField)
+            {
+                IntField old= (IntField) f;
+                temp= new IntField(old.getValue());
+            }
+            
+            else if (f instanceof StringField)
+            {
+                IntField old= (StringField) f;
+                temp= new StringField(old.getValue, old.getSize());
+            }
+            f.set(i, temp);
+        }
     }
 
     /**
@@ -71,7 +97,10 @@ public class Tuple implements Serializable {
      */
     public Field getField(int i) {
         // some code goes here
-        return null;
+        if(i > 0 && i < size)
+            return f[i];
+        else
+            return null;
     }
 
     /**
@@ -83,8 +112,15 @@ public class Tuple implements Serializable {
      * where \t is any whitespace, except newline, and \n is a newline
      */
     public String toString() {
-        // some code goes here
-        throw new UnsupportedOperationException("Implement this");
+        String returnString="";
+        Iterator<Field> itr= f.iterator();
+        while(itr.hasNext()) {
+            Field item = itr.next();
+            returnString+= itr.getValue();
+        }
+        returnString+="\n";
+        
+        return returnString;
     }
     
     /**
@@ -93,8 +129,7 @@ public class Tuple implements Serializable {
      * */
     public Iterator<Field> fields()
     {
-        // some code goes here
-        return null;
+        return f.iterator();
     }
     
     /**
@@ -104,4 +139,8 @@ public class Tuple implements Serializable {
     {
         // some code goes here
     }
+    private TupleDesc t;
+    private RecordId id;
+    private List<Field> f;
+    private int size;
 }
